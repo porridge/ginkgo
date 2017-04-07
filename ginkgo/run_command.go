@@ -138,7 +138,7 @@ func (r *SpecRunner) ComputeSuccinctMode(numSuites int) {
 
 func (r *SpecRunner) UpdateSeed() {
 	if !r.commandFlags.wasSet("seed") {
-		config.GinkgoConfig.RandomSeed = time.Now().Unix()
+		config.GinkgoConfig.SetRandomSeed(time.Now().Unix())
 	}
 }
 
@@ -152,7 +152,7 @@ func (r *SpecRunner) randomizeOrder(runners []*testrunner.TestRunner) []*testrun
 	}
 
 	randomizedRunners := make([]*testrunner.TestRunner, len(runners))
-	randomizer := rand.New(rand.NewSource(config.GinkgoConfig.RandomSeed))
+	randomizer := rand.New(rand.NewSource(config.GinkgoConfig.GetRandomSeed()))
 	permutation := randomizer.Perm(len(runners))
 	for i, j := range permutation {
 		randomizedRunners[i] = runners[j]

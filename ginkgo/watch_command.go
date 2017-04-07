@@ -169,6 +169,6 @@ func (w *SpecWatcher) ComputeSuccinctMode(numSuites int) {
 
 func (w *SpecWatcher) UpdateSeed() {
 	if !w.commandFlags.wasSet("seed") {
-		config.GinkgoConfig.RandomSeed = time.Now().Unix()
+		config.GinkgoConfig.SetRandomSeed(time.Now().Unix())
 	}
 }

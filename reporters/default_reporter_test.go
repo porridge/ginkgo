@@ -62,7 +62,7 @@ var _ = Describe("DefaultReporter", func() {
 
 			It("should announce the suite, then announce the number of specs", func() {
 				Ω(stenographer.Calls()).Should(HaveLen(2))
-				Ω(stenographer.Calls()[0]).Should(Equal(call("AnnounceSuite", "A Sweet Suite", ginkgoConfig.RandomSeed, true, false)))
+				Ω(stenographer.Calls()[0]).Should(Equal(call("AnnounceSuite", "A Sweet Suite", ginkgoConfig.GetRandomSeed(), true, false)))
 				Ω(stenographer.Calls()[1]).Should(Equal(call("AnnounceNumberOfSpecs", 8, 10, false)))
 			})
 		})
@@ -78,7 +78,7 @@ var _ = Describe("DefaultReporter", func() {
 
 			It("should announce the suite, announce that it's a parallel run, then announce the number of specs", func() {
 				Ω(stenographer.Calls()).Should(HaveLen(2))
-				Ω(stenographer.Calls()[0]).Should(Equal(call("AnnounceSuite", "A Sweet Suite", ginkgoConfig.RandomSeed, true, false)))
+				Ω(stenographer.Calls()[0]).Should(Equal(call("AnnounceSuite", "A Sweet Suite", ginkgoConfig.GetRandomSeed(), true, false)))
 				Ω(stenographer.Calls()[1]).Should(Equal(call("AnnounceParallelRun", 1, 2, false)))
 			})
 		})

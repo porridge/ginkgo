@@ -53,7 +53,7 @@ func (suite *Suite) Run(t ginkgoTestingT, description string, reporters []report
 		panic("ginkgo.parallel.node is one-indexed and must be <= ginkgo.parallel.total")
 	}
 
-	r := rand.New(rand.NewSource(config.RandomSeed))
+	r := rand.New(rand.NewSource(config.GetRandomSeed()))
 	suite.topLevelContainer.Shuffle(r)
 	iterator, hasProgrammaticFocus := suite.generateSpecsIterator(description, config)
 	suite.runner = specrunner.New(description, suite.beforeSuiteNode, iterator, suite.afterSuiteNode, reporters, writer, config)
@@ -77,7 +77,7 @@ func (suite *Suite) generateSpecsIterator(description string, config config.Gink
 	specs.RegexScansFilePath = config.RegexScansFilePath
 
 	if config.RandomizeAllSpecs {
-		specs.Shuffle(rand.New(rand.NewSource(config.RandomSeed)))
+		specs.Shuffle(rand.New(rand.NewSource(config.GetRandomSeed())))
 	}
 
 	specs.ApplyFocus(description, config.FocusString, config.SkipString)

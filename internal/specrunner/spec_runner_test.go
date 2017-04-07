@@ -157,7 +157,7 @@ var _ = Describe("Spec Runner", func() {
 		})
 
 		It("should report the passed in config", func() {
-			Ω(reporter1.Config.RandomSeed).Should(BeNumerically("==", 17))
+			Ω(reporter1.Config.GetRandomSeed()).Should(BeNumerically("==", 17))
 		})
 
 		It("should report the beginning of the suite", func() {
@@ -350,7 +350,7 @@ var _ = Describe("Spec Runner", func() {
 		})
 
 		It("should report the passed in config", func() {
-			Ω(reporter1.Config.RandomSeed).Should(BeNumerically("==", 17))
+			Ω(reporter1.Config.GetRandomSeed()).Should(BeNumerically("==", 17))
 		})
 
 		It("should report the beginning of the suite", func() {

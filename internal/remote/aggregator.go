@@ -123,7 +123,7 @@ func (aggregator *Aggregator) registerSuiteBeginning(configAndSuite configAndSui
 		return
 	}
 
-	aggregator.stenographer.AnnounceSuite(configAndSuite.summary.SuiteDescription, configAndSuite.config.RandomSeed, configAndSuite.config.RandomizeAllSpecs, aggregator.config.Succinct)
+	aggregator.stenographer.AnnounceSuite(configAndSuite.summary.SuiteDescription, configAndSuite.config.GetRandomSeed(), configAndSuite.config.RandomizeAllSpecs, aggregator.config.Succinct)
 
 	totalNumberOfSpecs := 0
 	if len(aggregator.aggregatedSuiteBeginnings) > 0 {

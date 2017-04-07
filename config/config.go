@@ -23,7 +23,9 @@ import (
 const VERSION = "1.3.1"
 
 type GinkgoConfigType struct {
+	// Deprecated: use GetRandomSeed() and SetRandomSeed()
 	RandomSeed         int64
+	randomSeedGetter   flag.Getter
 	RandomizeAllSpecs  bool
 	RegexScansFilePath bool
 	FocusString        string
@@ -42,6 +44,22 @@ type GinkgoConfigType struct {
 }
 
 var GinkgoConfig = GinkgoConfigType{}
+
+func (config *GinkgoConfigType) GetRandomSeed() int64 {
+	if config.randomSeedGetter != nil {
+		return config.randomSeedGetter.Get().(int64)
+	} else {
+		return config.RandomSeed
+	}
+}
+
+func (config *GinkgoConfigType) SetRandomSeed(value int64) {
+	if config.randomSeedGetter != nil {
+		config.randomSeedGetter.Set(string(value))
+	} else {
+		config.RandomSeed = value
+	}
+}
 
 type DefaultReporterConfigType struct {
 	NoColor           bool
@@ -63,7 +81,12 @@ func processPrefix(prefix string) string {
 
 func Flags(flagSet *flag.FlagSet, prefix string, includeParallelFlags bool) {
 	prefix = processPrefix(prefix)
-	flagSet.Int64Var(&(GinkgoConfig.RandomSeed), prefix+"seed", time.Now().Unix(), "The seed used to randomize the spec suite.")
+	randomSeedFlag := flag.Lookup(prefix+"seed")
+	if randomSeedFlag == nil {
+		flagSet.Int64Var(&(GinkgoConfig.RandomSeed), prefix+"seed", time.Now().Unix(), "The seed used to randomize the spec suite.")
+	} else {
+		GinkgoConfig.randomSeedGetter = (*randomSeedFlag).Value.(flag.Getter)
+	}
 	flagSet.BoolVar(&(GinkgoConfig.RandomizeAllSpecs), prefix+"randomizeAllSpecs", false, "If set, ginkgo will randomize all specs together.  By default, ginkgo only randomizes the top level Describe/Context groups.")
 	flagSet.BoolVar(&(GinkgoConfig.SkipMeasurements), prefix+"skipMeasurements", false, "If set, ginkgo will skip any measurement specs.")
 	flagSet.BoolVar(&(GinkgoConfig.FailOnPending), prefix+"failOnPending", false, "If set, ginkgo will mark the test suite as failed if any specs are pending.")
@@ -99,8 +122,8 @@ func BuildFlagArgs(prefix string, ginkgo GinkgoConfigType, reporter DefaultRepor
 	prefix = processPrefix(prefix)
 	result := make([]string, 0)
 
-	if ginkgo.RandomSeed > 0 {
-		result = append(result, fmt.Sprintf("--%sseed=%d", prefix, ginkgo.RandomSeed))
+	if ginkgo.GetRandomSeed() > 0 {
+		result = append(result, fmt.Sprintf("--%sseed=%d", prefix, ginkgo.GetRandomSeed()))
 	}
 
 	if ginkgo.RandomizeAllSpecs {

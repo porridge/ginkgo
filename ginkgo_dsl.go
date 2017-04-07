@@ -73,7 +73,7 @@ type GinkgoTestingT interface {
 //consistent executions from run to run, where your tests contain variability (for
 //example, when selecting random test data).
 func GinkgoRandomSeed() int64 {
-	return config.GinkgoConfig.RandomSeed
+	return config.GinkgoConfig.GetRandomSeed()
 }
 
 //GinkgoParallelNode returns the parallel node number for the current ginkgo process

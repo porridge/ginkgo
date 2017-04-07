@@ -27,7 +27,7 @@ func NewDefaultReporter(config config.DefaultReporterConfigType, stenographer st
 }
 
 func (reporter *DefaultReporter) SpecSuiteWillBegin(config config.GinkgoConfigType, summary *types.SuiteSummary) {
-	reporter.stenographer.AnnounceSuite(summary.SuiteDescription, config.RandomSeed, config.RandomizeAllSpecs, reporter.config.Succinct)
+	reporter.stenographer.AnnounceSuite(summary.SuiteDescription, config.GetRandomSeed(), config.RandomizeAllSpecs, reporter.config.Succinct)
 	if config.ParallelTotal > 1 {
 		reporter.stenographer.AnnounceParallelRun(config.ParallelNode, config.ParallelTotal, reporter.config.Succinct)
 	} else {
